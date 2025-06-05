@@ -1,5 +1,6 @@
 Here’s how I modified a modern reedless door sensor for my home water meter.
 
+# Modify Zigbee Door/Window Sensor
 
 Generic Zigbee door/window sensor:
 
@@ -39,7 +40,7 @@ On my meter the hall sensor is located approx 5mm inside the probe hole.
 ![](./7.png)
 
 
-**Home Assistant Configuration**
+# Home Assistant Configuration
 
 - Add the zigbee sensor to Home Assistant as device name ‘WaterMain’
 
