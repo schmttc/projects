@@ -1,8 +1,8 @@
-Hi Everyone, here’s how I modified a modern reedless door sensor for my Melbourne, Australia water meter.
+Here’s how I modified a modern reedless door sensor for my home water meter.
 
 
 Generic Zigbee door/window sensor:
-![](./1.png)
+![](1.png)
 
 Internal PCB. The hall sensor is H1 circled in red.
 ![](./2.png)
