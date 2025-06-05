@@ -1,9 +1,8 @@
 Here’s how I modified a modern reedless door sensor for my home water meter.
 
 **TOC**
-
-[Modify Zigbee Door/Window Sensor](#modify-zigbeedoorwindow-sensor)
-[Home Assistant Configuration](#home-assistant-configuration)
+- [Modify Zigbee Door/Window Sensor](#modify-zigbeedoorwindow-sensor)
+- [Home Assistant Configuration](#home-assistant-configuration)
 
 
 # Modify Zigbee Door/Window Sensor
