@@ -18,7 +18,7 @@ Internal PCB. The hall sensor is H1 circled in red.
 
 Desolder the hall sensor, and wire in your extension wires VCC/GND/Signal
 
-![](./3.jpeg)
+![](./3.png)
 
 
 Solder the hall sensor to the other end of your extension wires. Try to ensure you get a solid connection, my first try came unstuck when I was trying to find the right probe location. It may be a good idea to first put a blob of hot glue around the sensor to mechanically reinforce the connection.
