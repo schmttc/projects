@@ -2,34 +2,34 @@ Hi Everyone, here’s how I modified a modern reedless door sensor for my Melbou
 
 
 Generic Zigbee door/window sensor:
-![1|352x182](./1.png)
+![](./1.png)
 
 Internal PCB. The hall sensor is H1 circled in red.
-![2|597x274](./2.png)
+![](./2.png)
 
 
 Desolder the hall sensor, and wire in your extension wires VCC/GND/Signal
-![3|690x293](./3.jpeg)
+![](./3.jpeg)
 
 
 Solder the hall sensor to the other end of your extension wires. Try to ensure you get a solid connection, my first try came unstuck when I was trying to find the right probe location. It may be a good idea to first put a blob of hot glue around the sensor to mechanically reinforce the connection.
-![4|413x234](./4.png)
+![](./4.png)
 
 
 Create a probe 4.5mm in diameter and around 30mm long (the meter's probe hole is about 40mm deep) using heat shrink or tape. You want the probe to fit in the meter, but not be too easily knocked out of position. To provide structure, first I used a nail, which transmitted the magnetic pulse with low positioning accuracy required, but I was concerned about long term magnetisation of the nail causing the sensor to become faulty over time.
 
 Instead I used a piece of bamboo skewer, but the positioning of the hall sensor needs to be quite precise (within a few mm)
-![5|413x175](./5.png)
+![](./5.png)
 
 
 Testing on new batteries I reliably received a signal on a 5m cable (my in place implementation is around 3.5m)
-![6|365x419](./6.png)
+![](./6.png)
 
 
 As mentioned above, placement of the hall sensor needs to be quite precise. Turn a tap on so your meter is running, and hunt around for the correct position by watching for the red light on your sensor.
 
 On my meter the hall sensor is located approx 5mm inside the probe hole.
-![7|690x414](./7.png)
+![](./7.png)
 
 
 **Home Assistant Configuration**
