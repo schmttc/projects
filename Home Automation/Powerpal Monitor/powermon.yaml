@@ -1,5 +1,5 @@
 # Powerpal Monitor
-#
+# Source: https://github.com/schmttc/projects/tree/main/Home%20Automation/Powerpal%20Monitor
 # References: https://community.home-assistant.io/t/powerpal-smart-energy-monitor/263713/592
 
 esphome:
