@@ -1,0 +1,166 @@
+# Powerpal Monitor
+#
+# References: https://community.home-assistant.io/t/powerpal-smart-energy-monitor/263713/592
+
+esphome:
+  name: powermon
+  friendly_name: PowerMon
+  on_boot:
+    priority: -100
+    then:
+      - script.execute: enable_powerpal_sync_monitor
+
+esp32:
+  board: esp32-c3-devkitm-1
+  variant: esp32c3
+  framework:
+    type: esp-idf
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "xxxx"       # Replace with your key
+
+ota:
+  - platform: esphome
+    password: "xxxx"    # Replace with your password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+# Above: ESP Device Config
+###########
+# Below: Custom Configuration
+
+# Enable ESP Home device web page
+web_server:
+
+external_components:
+# for esp-idf framework
+  - source:
+      type: git
+      url: https://github.com/gurrier/esphome-powerpal_ble.git
+      ref: "1.2" 
+    components: [ powerpal_ble ]
+# for arduino framework
+#   type: git
+  #   url: https://github.com/muneeb1990/esphome
+  #   ref: powerpal_ble
+
+globals:
+  - id: powerpal_daily_pulses_backup
+    type: int
+    restore_value: true
+  - id: powerpal_last_update
+    type: uint32_t
+    restore_value: false
+    initial_value: '0'
+  - id: powerpal_sync_monitor_enabled
+    type: bool
+    restore_value: false
+    initial_value: 'false'
+
+# Administrative Tasks
+#---------------------
+# Soft Reset
+button:
+  - platform: restart
+    name: "ESPHome Restart"
+# Manual fix for new batteries sync issue  https://community.home-assistant.io/t/powerpal-smart-energy-monitor/263713/575
+  - platform: template
+    name: "Powerpal: Set Device Time (now)"
+    id: powerpal_set_time_button
+    on_press:
+      - ble_client.ble_write:
+          id: powerpal
+          service_uuid: '59DAABCD-12F4-25A6-7D4F-55961DCE4205'
+          characteristic_uuid: '59DA0004-12F4-25A6-7D4F-55961DCE4205'   # time
+          value: !lambda |-
+            uint32_t t = id(homeassistant_time).now().timestamp;
+            return std::vector<uint8_t>{
+              (uint8_t)(t      ), (uint8_t)(t >> 8),
+              (uint8_t)(t >> 16), (uint8_t)(t >> 24)
+            };
+# Automatically Reset clock if no reading for 90sec
+script:
+  - id: enable_powerpal_sync_monitor
+    mode: restart
+    then:
+      - delay: 2min
+      - lambda: |-
+          id(powerpal_sync_monitor_enabled) = true;
+          ESP_LOGI("powerpal", "Powerpal interval checker enabled after 2 min.");
+interval:
+  - interval: 30s
+    then:
+      - lambda: |-
+          if (!id(powerpal_sync_monitor_enabled)) return;
+          uint32_t now = id(homeassistant_time).now().timestamp;
+          if ((now - id(powerpal_last_update)) > 90) {
+            ESP_LOGI("powerpal", "No Powerpal reading in last 90s — syncing time.");
+            id(powerpal_set_time_button).press();
+            id(powerpal_last_update) = now;
+          }
+
+# Follow this guide to upload results to PowerPal main server https://community.home-assistant.io/t/powerpal-smart-energy-monitor/263713/264
+  # Couldn't get it to work
+
+# optional requirement to enable powerpal cloud uploading - doesn't work
+#http_request:
+#  id: powerpal_cloud_uploader
+#  verify_ssl: false    
+
+# optional requirement used with daily energy sensor
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+
+esp32_ble_tracker:
+
+ble_client:
+  - mac_address: 00:00:00:00:00:00 # Replace with your PowerPal device's MAC address
+    id: powerpal
+
+sensor:
+  - platform: powerpal_ble
+    id: powerpal_ble_sensor
+    ble_client_id: powerpal
+    power:
+      name: "Powerpal Power"
+      id: powerpal_power_sensor
+      on_value:
+        then:
+          - lambda: |-
+              id(powerpal_last_update) = id(homeassistant_time).now().timestamp;
+    daily_energy:
+      name: "Powerpal Daily Energy"
+      device_class: energy
+      state_class: total
+    energy:
+      name: "Powerpal Total Energy"
+    battery_level:
+      name: "Powerpal Battery"
+    watt_hours:
+       name: "Powerpal Watt Hours_json"
+    cost:
+       name: "Powerpal Cost_json"
+    timestamp:
+       name: "Powerpal Timestamp_json"
+    pulses:
+       name: "Powerpal Pulses_json"
+
+    pairing_code: 000000      # Replace with your PowerPal device's pairing code
+    notification_interval: 1
+    pulses_per_kwh: 1000
+    time_id: homeassistant_time  # daily energy still works without a time_id, but recommended to include one to properly handle daylight savings, etc.
+    #http_request_id: powerpal_cloud_uploader
+    cost_per_kwh: 0.38 #dollars per kWh
+    #powerpal_device_id: 00000000 #optional, component will retrieve from your Powerpal if not set
+    #powerpal_apikey: 00000000-0000-0000-0000-000000000000 #optional, component will retrieve from your Powerpal if not set
+
+preferences:
+ flash_write_interval: never
