@@ -1,5 +1,3 @@
-# Electronics Projects
-
 ## displayModuleImageTester.html
 <a href="https://schmttc.github.io/projects/Electronics/displayModuleImageTester.html">Live Demo</a>
 

@@ -41,13 +41,39 @@
       top: 0;
       z-index: 5;
       display: grid;
-      grid-template-columns: minmax(320px, 1fr) auto;
+      grid-template-columns: auto minmax(320px, 1fr) auto;
       gap: 18px;
       align-items: stretch;
       padding: 14px;
       border-bottom: 1px solid var(--line);
       background: rgba(244, 245, 241, 0.96);
       backdrop-filter: blur(10px);
+    }
+
+    .topbar-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      align-self: start;
+      min-height: 38px;
+      padding: 0 13px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      color: var(--ink);
+      background: var(--panel);
+      cursor: pointer;
+      font-weight: 700;
+      white-space: nowrap;
+      box-shadow: var(--shadow);
+    }
+
+    .topbar-toggle:hover {
+      border-color: var(--accent);
+    }
+
+    .topbar.collapsed .loader,
+    .topbar.collapsed .calibration {
+      display: none;
     }
 
     .loader {
@@ -413,6 +439,8 @@
 </head>
 <body>
   <header class="topbar">
+    <button class="topbar-toggle" id="topbarToggle" type="button" aria-expanded="true">Hide controls</button>
+
     <section class="loader" id="dropZone" aria-label="Image loader">
       <label class="file-button">
         Select image
@@ -533,6 +561,8 @@
       screens: defaultScreens.map((screen) => ({ ...screen }))
     };
 
+    const topbar = document.querySelector(".topbar");
+    const topbarToggle = document.querySelector("#topbarToggle");
     const dropZone = document.querySelector("#dropZone");
     const fileInput = document.querySelector("#fileInput");
     const urlForm = document.querySelector("#urlForm");
@@ -803,6 +833,12 @@
     addScreen.addEventListener("click", () => {
       state.screens.push({ panelKey: "custom", name: `Screen ${state.screens.length + 1}`, width: 320, height: 240, physicalWidth: 50, physicalHeight: 38, colorMode: "full" });
       renderScreens();
+    });
+
+    topbarToggle.addEventListener("click", () => {
+      const isCollapsed = topbar.classList.toggle("collapsed");
+      topbarToggle.textContent = isCollapsed ? "Show controls" : "Hide controls";
+      topbarToggle.setAttribute("aria-expanded", String(!isCollapsed));
     });
 
     renderScreens();
