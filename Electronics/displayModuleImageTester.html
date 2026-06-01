@@ -473,10 +473,6 @@
           <input class="height-input" type="number" min="1" max="4096" step="1">
         </div>
         <div class="control">
-          <label>Scale %</label>
-          <input class="scale-input" type="number" min="10" max="800" step="5">
-        </div>
-        <div class="control">
           <label>X mm</label>
           <input class="physical-width-input" type="number" min="1" max="1000" step="0.1">
         </div>
@@ -526,7 +522,6 @@
     const defaultScreens = panelPresets.map((panel) => ({
       ...panel,
       panelKey: panel.key,
-      scale: 100,
       colorMode: "full"
     }));
 
@@ -657,7 +652,6 @@
         const meta = clone.querySelector(".screen-meta");
         const widthInput = clone.querySelector(".width-input");
         const heightInput = clone.querySelector(".height-input");
-        const scaleInput = clone.querySelector(".scale-input");
         const physicalWidthInput = clone.querySelector(".physical-width-input");
         const physicalHeightInput = clone.querySelector(".physical-height-input");
         const colorInputs = clone.querySelectorAll(".radio-group input");
@@ -665,9 +659,8 @@
         const canvas = clone.querySelector("canvas");
         const emptyState = clone.querySelector(".empty-state");
         const removeButton = clone.querySelector(".remove-button");
-        const cssScale = screen.scale / 100;
-        const displayWidth = screen.physicalWidth * pxPerMeasuredMm * cssScale;
-        const displayHeight = screen.physicalHeight * pxPerMeasuredMm * cssScale;
+        const displayWidth = screen.physicalWidth * pxPerMeasuredMm;
+        const displayHeight = screen.physicalHeight * pxPerMeasuredMm;
         const physicalScaleX = displayWidth / screen.width;
         const physicalScaleY = displayHeight / screen.height;
         const pixelDiagonal = Math.hypot(screen.width, screen.height);
@@ -691,7 +684,6 @@
         meta.textContent = `${screen.width} x ${screen.height} px, ${screen.physicalWidth} x ${screen.physicalHeight} mm, ${ppi.toFixed(0)} ppi`;
         widthInput.value = screen.width;
         heightInput.value = screen.height;
-        scaleInput.value = screen.scale;
         physicalWidthInput.value = screen.physicalWidth;
         physicalHeightInput.value = screen.physicalHeight;
         colorInputs.forEach((input) => {
@@ -754,11 +746,6 @@
           renderScreens();
         });
 
-        scaleInput.addEventListener("change", () => {
-          screen.scale = clampNumber(scaleInput.value, screen.scale, 10, 800);
-          renderScreens();
-        });
-
         physicalWidthInput.addEventListener("change", () => {
           screen.physicalWidth = clampFloat(physicalWidthInput.value, screen.physicalWidth, 1, 1000);
           screen.panelKey = "custom";
@@ -814,7 +801,7 @@
     });
 
     addScreen.addEventListener("click", () => {
-      state.screens.push({ panelKey: "custom", name: `Screen ${state.screens.length + 1}`, width: 320, height: 240, physicalWidth: 50, physicalHeight: 38, scale: 100, colorMode: "full" });
+      state.screens.push({ panelKey: "custom", name: `Screen ${state.screens.length + 1}`, width: 320, height: 240, physicalWidth: 50, physicalHeight: 38, colorMode: "full" });
       renderScreens();
     });
 
