@@ -1,5 +1,5 @@
 ## displayModuleImageTester.html
-<a href="https://schmttc.github.io/projects/Electronics/displayModuleImageTester.html">Live Demo</a>
+<a href="displayModuleImageTester.html">Live Demo</a>
 
 A HTML page designed to help assess the static display capabilites of small display modules, without having to buy one.
 - Load an image, and you can view and compare an approximately scaled output on one or more virtual displays.
