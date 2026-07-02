@@ -10,7 +10,7 @@ A USB power meter for electronics projects designed to get uA level power readin
 - USB A breakout board
 
 ### Operation
--Updates display every 2s
+- Updates display every 2s
 - Displays readings in approprate scale for
   - Instantaneous Voltage (V)
   - Instantaneous Current (I)
