@@ -1,7 +1,7 @@
 Little projects and notes that don't need their own repo.
 
 
-<a href="https://schmttc.github.io/projects/electronics/">displayModuleImageTester</a>  
+<a href="https://schmttc.github.io/projects/electronics/displayModuleImageTester">displayModuleImageTester</a>  
 A HTML page designed to help assess the static display capabilites of small display modules, without having to buy one.
 
 
